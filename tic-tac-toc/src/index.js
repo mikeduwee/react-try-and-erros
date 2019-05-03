@@ -5,7 +5,10 @@ import './index.css';
 
 function Square(props) {
   return (
-    <button className="square" onClick={props.onClick}>
+    <button 
+      className={props.marked? 'squareMarked': 'square'}
+      onClick={props.onClick}
+    >
       {props.value}
     </button>
   );
@@ -15,6 +18,7 @@ class Board extends React.Component {
   renderSquare(i) {
     return (
       <Square
+        marked={this.props.marked==i?'Marked':''}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
       />
@@ -114,6 +118,7 @@ class Game extends React.Component {
       <div className="game">
         <div className="game-board">
           <Board
+            marked={current.marked}
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
           />
