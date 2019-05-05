@@ -51,6 +51,18 @@ class Board extends React.Component {
   }
 }
 
+class Toggle extends React.Component {
+
+  render() {
+    return (
+      <button onClick={this.props.handleToggleClick}>
+        {this.props.isToggleAsc ? 'ASC' : 'DESC'}
+      </button>
+    );
+  }
+}
+
+
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -60,7 +72,8 @@ class Game extends React.Component {
         marked: [null, null]
       }],
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
+      isToggleAsc: true
     };
   }
 
@@ -83,7 +96,13 @@ class Game extends React.Component {
       xIsNext: !this.state.xIsNext,
     });
   }
-  
+
+  handleToggleClick() {
+    this.setState(prevState => ({
+     isToggleAsc: !prevState.isToggleAsc
+    }));
+  }
+
   jumpTo(step){
     this.setState({
       stepNumber: step,
@@ -95,6 +114,7 @@ class Game extends React.Component {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
+    const isAsc = this.state.isToggleAsc;
 
     const moves = history.map((step, move) => {
       const marked = index2rowcolumn(step.marked)
@@ -128,6 +148,10 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <Toggle
+              handleToggleClick={() => this.handleToggleClick()}
+              isToggleAsc={isAsc}
+          />
           <ol>{moves}</ol>
         </div>
       </div>
